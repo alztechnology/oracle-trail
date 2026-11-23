@@ -10,9 +10,9 @@ function stats(){document.getElementById("stats").innerHTML=`<b>${S.pts}</b> pts
 function links(u){return u.links?`<p>📚 Further reading</p><ul>${u.links.map(l=>`<li><a target="_blank" rel="noopener" href="${l[0]}">${l[1]}</a></li>`).join("")}</ul>`:""}
 function cp(b){const t=b.nextElementSibling.innerText;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent="Copied ✓";setTimeout(()=>b.textContent="Copy",1500)}).catch(()=>{const r=document.createRange();r.selectNodeContents(b.nextElementSibling);const s=getSelection();s.removeAllRanges();s.addRange(r)})}
 function home(){const n=Object.keys(S.done).length,tot=allUnits().length;
-$(`<div class="card"><h1>Hai sayang AL 👋</h1>
+$(`<div class="card"><h1>Hai AL 👋</h1>
 <p>Irene built this one for you, same warm trail as your Salesforce and Tableau pages. An Oracle SQL and PL/SQL refresher bootcamp, so you can walk into the Coforge Technical BA interview, or any Oracle-heavy role, and feel calm when they say "Can you write that in SQL?"</p>
-<p>You already think in data, baby: IBM signings and backlog validation, month-end reporting, Lenovo APJ metrics, Siebel and Salesforce behind the screens, Jira and UAT. This trail puts that thinking into proper Oracle words, one short lesson at a time. Every example was run on a real Oracle database, and you can open the result under each one.</p>
+<p>You already think in data: IBM signings and backlog validation, month-end reporting, Lenovo APJ metrics, Siebel and Salesforce behind the screens, Jira and UAT. This trail puts that thinking into proper Oracle words, one short lesson at a time. Every example was run on a real Oracle database, and you can open the result under each one.</p>
 <p>Read on your phone anytime. Practise free on <a target="_blank" rel="noopener" href="https://freesql.com">Oracle FreeSQL</a> (the new Live SQL) after loading the <a href="#schema">practice schema</a>. Jom!</p>
 <div class="bar"><i style="width:${n/tot*100}%"></i></div><p>${n}/${tot} lessons · Rank: <b>${rank()}</b></p></div>
 <div class="card"><h3>🏅 Badges</h3><div class="badges">${TRAILS.map(t=>`<span class="${tDone(t)==t.units.length?'':'off'}">${t.icon} ${t.title}</span>`).join("")}<span class="${Object.keys(S.sim).length>=SIM.length?'':'off'}">🎤 Interview Ready</span></div></div>
@@ -41,14 +41,14 @@ if(n<u.quiz.length||(u.short&&!Q.short)){f.innerHTML=`<small>Answer all quiz que
 const right=u.quiz.filter((q,i)=>Q.ans[i]==q.a).length,pts=100+right*100;
 if(!S.done[u.id]||pts>S.done[u.id]){S.pts+=pts-(S.done[u.id]||0);S.done[u.id]=pts;save();stats()}
 const list=allUnits(),idx=list.findIndex(x=>x.id==u.id),nx=list[idx+1],t=u.trail;
-f.innerHTML=`<h3>🏁 Lesson complete! ${right}/${u.quiz.length} correct · +${pts} pts</h3>${tDone(t)==t.units.length?`<p>🏅 Badge earned: <b>${t.icon} ${t.title}</b>! Hebat sayang!</p>`:""}
+f.innerHTML=`<h3>🏁 Lesson complete! ${right}/${u.quiz.length} correct · +${pts} pts</h3>${tDone(t)==t.units.length?`<p>🏅 Badge earned: <b>${t.icon} ${t.title}</b>! Hebat!</p>`:""}
 ${right<u.quiz.length?`<button class="sec" onclick="unit('${u.id}')">Retry for full points</button>`:""}${nx?`<a class="btn" href="#u/${nx.id}">Next lesson →</a>`:`<a class="btn" href="#sim">On to the interview simulator →</a>`}`}
-function sim(){$(`<div class="card"><a href="#">← Home</a><h1>🎤 Interview Simulator</h1><p>Answer out loud or type, then compare with the model answer and rate yourself. +150 pts each. Be honest, baby. These answers use only your real background and never claim production PL/SQL you have not done.</p></div>`+
+function sim(){$(`<div class="card"><a href="#">← Home</a><h1>🎤 Interview Simulator</h1><p>Answer out loud or type, then compare with the model answer and rate yourself. +150 pts each. Be honest. These answers use only your real background and never claim production PL/SQL you have not done.</p></div>`+
 SIM.map((s,i)=>`<div class="card"><p><b>Q${i+1}. ${s.q}</b></p><textarea></textarea><button onclick="this.nextElementSibling.style.display='block'">Show model answer</button><div class="ex" style="display:none">${s.m}<br><br>How did you do? <button onclick="rate(${i},2)">💪 Nailed it</button><button class="sec" onclick="rate(${i},1)">🙂 Partly</button></div>${S.sim[i]?'<small>✅ done</small>':''}</div>`).join(""))}
 function rate(i,v){if(!S.sim[i]){S.pts+=150;save();stats()}S.sim[i]=v;save();sim()}
 function schema(){$(`<div class="card"><a href="#">← Home</a><h1>🗂️ Practice schema</h1>${SCHEMA_INTRO}</div>
 <div class="card"><h3>The script</h3><p><a class="btn" href="schema.sql" download>⬇️ Download schema.sql</a></p><div class="code"><button class="copy" onclick="cp(this)">Copy</button><pre>${esc(SCHEMA_SQL)}</pre></div></div>`)}
-function cheat(){$(`<div class="card cheat"><a href="#">← Home</a><h1>📌 Oracle cheat sheet</h1><p>Everything on one page, sayang. Skim it the night before.</p>${CHEAT}</div>`)}
+function cheat(){$(`<div class="card cheat"><a href="#">← Home</a><h1>📌 Oracle cheat sheet</h1><p>Everything on one page. Skim it the night before.</p>${CHEAT}</div>`)}
 function xlate(){$(`<div class="card"><a href="#">← Home</a><h1>🔁 SQL Server / MySQL to Oracle</h1><p>If you think it in T-SQL or MySQL first, here is how to say it in Oracle. Mentioning one or two of these in an interview shows you have worked across databases.</p>
 <div class="tablewrap"><table><tr><th>Task</th><th>SQL Server</th><th>MySQL</th><th>Oracle</th></tr>${XLATE.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td><code>${esc(r[1])}</code></td><td><code>${esc(r[2])}</code></td><td><code>${esc(r[3])}</code></td></tr>`).join("")}</table></div></div>`)}
 function route(){const h=location.hash.slice(1).split("/");stats();window.scrollTo(0,0);
